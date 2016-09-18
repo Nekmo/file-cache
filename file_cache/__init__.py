@@ -1,5 +1,6 @@
 import os
 
+__version__ = '0.1.0'
 CACHE_DIR = os.path.expanduser('~/.local/cache')
 
 
