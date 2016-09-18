@@ -58,7 +58,7 @@ CLASSIFIERS = [
 ]  # https://pypi.python.org/pypi?%3Aaction=list_classifiers
 NATURAL_LANGUAGE = 'English'  # English...
 DESCRIPTION = """\
-High-level API for Anime News Network. It improves the original structure and "pythonize". 100% OOP.
+File-cache manage cache files and key-value caches for you!
 """
 
 # Requerido para la correcta instalación del paquete
