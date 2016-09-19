@@ -13,3 +13,8 @@ class CacheBase(object):
     def get_cache_dir(self):
         return os.path.join(CACHE_DIR, self.project_name, self.type)
 
+    def get_and_create_cache_dir(self):
+        from .utils import makedirs
+        path = self.get_cache_dir()
+        makedirs(path, exist_ok=True)
+        return path

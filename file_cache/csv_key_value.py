@@ -6,15 +6,17 @@ import os
 from file_cache import CacheBase
 
 
-class KeyValuesCache(CacheBase):
-    def __init__(self, project_name, fields=('name', 'value', 'updated_at'), dialect='excel-tav'):
-        super(KeyValuesCache, self).__init__(project_name)
+class KeyValueCache(CacheBase):
+    type = 'csv_key_value'
+
+    def __init__(self, project_name, fields=('key', 'value', 'updated_at'), dialect='excel-tab'):
+        super(KeyValueCache, self).__init__(project_name)
         self.fields = fields
         self.dialect = dialect
 
     def get_cache_path(self, key):
         hash = hashlib.md5(key.encode('utf-8')).hexdigest()[:2]
-        return os.path.join(self.get_cache_dir(), '{}.csv'.format(hash))
+        return os.path.join(self.get_and_create_cache_dir(), '{}.csv'.format(hash))
 
     def _get_csv_reader(self, key):
         return csv.DictReader(open(self.get_cache_path(key)), fieldnames=self.fields, dialect=self.dialect)
@@ -30,7 +32,7 @@ class KeyValuesCache(CacheBase):
         if 'value' in self.fields:
             data['value'] = value
         if 'updated_at' in self.fields:
-            data['updated_at'] = datetime.datetime.now()
+            data['updated_at'] = datetime.datetime.now().isoformat()
         data.update(kwargs)
         return data
 
@@ -46,9 +48,9 @@ class KeyValuesCache(CacheBase):
         lines.append(new_line)
         self._save_cache(path, lines)
 
-    def load(self, key, label):
+    def load(self, key):
         path = self.get_cache_path(key)
         lines = list(self._get_csv_reader(key)) if os.path.lexists(path) else []
         for line in lines:
-            if line['name'] == key:
+            if line['key'] == key:
                 return line

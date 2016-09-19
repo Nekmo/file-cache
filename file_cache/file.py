@@ -7,12 +7,11 @@ from file_cache import CACHE_DIR, CacheBase
 
 
 class FileCache(CacheBase):
-    name = 'file'
+    type = 'file'
 
     def get_cache_path(self, name, ext='json'):
         name = str(name)
-        os.makedirs(self.get_cache_dir(), exist_ok=True)
-        return os.path.join(self.get_cache_dir(), '.'.join([name, ext]))
+        return os.path.join(self.get_and_create_cache_dir(), '.'.join([name, ext]))
 
     def save(self, data, name, ext='json'):
         file = self.get_cache_path(name, ext)
